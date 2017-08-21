@@ -1,0 +1,5 @@
+---
+- name: install WanDisco repository for git 2.x
+  yum:
+    name: "http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: latest

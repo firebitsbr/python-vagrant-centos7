@@ -6,7 +6,8 @@
     - { role: vagrant_configure, tags: ['setup'] }
     - { role: firewalld, tags: ['firewalld'] }
     - { role: repository_epel, tags: ['yum'] }
-    - { role: repository_ius, tags: ['yum'] }
+    - { role: repository_ius, tags: ['yum', 'python', 'mod_wsgi'] }
+    - { role: repository_wandisco, tags: ['yum', 'git'] }
     - { role: yum_packages, tags: ['yum'] }
     - { role: python27, tags: ['python'] }
     - { role: python35, tags: ['python'] }
