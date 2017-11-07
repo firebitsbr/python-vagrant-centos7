@@ -1,22 +1,22 @@
-# A CentOS 7.2 Vagrant Box with Python 3.5 via Ansible
+# A CentOS 7.2 Vagrant Box with Python 3.5 & 3.6 via Ansible
 
 * Apache 2.4, with mod_wsgi for running Django
 * FreeTDS drivers for MS SQL Server
 * PostgreSQL Drivers & Server
 * Node + npm
 
-This repository contains a CentOS 7.2 box for Vagrant. Python 3.5.3 is installed alongside the system Python (2.7.5). The Vagrant config uses Ansible roles to configure the box for the development environment, that should also be suitable for setting up a production server.
+This repository contains a CentOS 7.2 box for Vagrant. Python 3.5 and 3.6 are installed alongside the system Python (2.7.5). The Vagrant config uses Ansible roles to configure the box for the development environment, that should also be (mostly) suitable for setting up a production server. `Cookiecutter`, `virtualenvwrapper`, and `Pygments` are installed with the system Python.
 
-MS SQL is also supported as a Django database backend with the FreeTDS ODBC Driver to SQL Server. PostgreSQL 9.6, including the server, can be install optionally for those using PostgreSQL.
+PostgreSQL 10 is installed locally, server and all for full-stack local development. MS SQL is also supported as a Django database backend with the FreeTDS ODBC Driver to an external SQL Server.
 
-Django versions 1.8 and greater are supported, however, Django 1.11 or greater is recommended at the time of this writing for new projects. Django 1.11 is an LTS (Long Term Support) release, meaning it will be actively supported with bug fixes and security patches until at least April, 2020 (and probably longer): https://www.djangoproject.com/download/#supported-versions
+Django 1.11 or greater is recommended at the time of this writing for new projects. Django 1.11 is an LTS (Long Term Support) release, meaning it will be actively supported with bug fixes and security patches until at least April, 2020 (and probably longer): https://www.djangoproject.com/download/#supported-versions
 
 ## Compatibility & Prerequisites to Install
 
 ### Mac
 
-* Tested with Vagrant 1.9.5: https://releases.hashicorp.com/vagrant/1.9.5/vagrant_1.9.5_x86_64.dmg
-* Tested with VirtualBox 5.1.22: http://download.virtualbox.org/virtualbox/5.1.22/VirtualBox-5.1.22-115126-OSX.dmg
+* Tested with Vagrant 2.0.1: https://releases.hashicorp.com/vagrant/2.0.1/vagrant_2.0.1_x86_64.dmg
+* Tested with VirtualBox 5.2.0: http://download.virtualbox.org/virtualbox/5.2.0/VirtualBox-5.2.0-118431-OSX.dmg
 * Git is required: http://git-scm.com/downloads
 * Tested on: OS/X Yosemite, and El Capitan, and Sierra.
 
@@ -37,21 +37,22 @@ $ sudo dnf install VirtualBox
 
 ### Windows
 
-* Tested with Vagrant 1.9.5: https://releases.hashicorp.com/vagrant/1.9.5/vagrant_1.9.5.msi
-* Tested with VirtualBox 5.1.22: http://download.virtualbox.org/virtualbox/5.1.22/VirtualBox-5.1.22-115126-Win.exe
+* Tested with Vagrant 2.0.1: https://releases.hashicorp.com/vagrant/2.0.1/vagrant_2.0.1_x86_64.msi
+* Tested with VirtualBox 5.2.0: http://download.virtualbox.org/virtualbox/5.2.0/VirtualBox-5.2.0-118431-Win.exe
 * Git Bash is required, not the Windows Command Prompt (cmd.exe): https://git-for-windows.github.io/
     * In Git Bash, click the diamond shaped multi-colored icon in the upper left of the window, OPTIONS. You may want to go through the option list to increase your default window size, set up copy/paste shortcuts, and set up mouse selection for copy/paste.
 * On newer machines, ensure that you have virtualization enabled in BIOS (Google it for your machine's model).
 * Tested on: Windows 7, 8, and 10.
+* There is currently a bug in Vagrant with the terminal settings. If you type `vagrant ssh` and it hangs, change your terminal settings in git-bash to be `xterm-256color` by clicking the icon in the top left of the terminal windows, Options, Terminal, and selecting `xterm-256color` in the Type dropdown.
 
 ## Get Started
 
 * Create and add a public SSH key to your git server (GitHub, GitLab, etc).
-
 * Clone the repository and bring up the virtual development environment. The first time you install the box, "vagrant up" will take a little while. Grab a cup of coffee or something!
 * Use a host name for your domain; for example, if you're a member of The Wharton School, you may want to use the command `VAGRANT_HOSTNAME="vagrant.wharton.upenn.edu" vagrant up` below. If you don't provide a hostname, it will be set to `vagrant.example.com`.
+* The Vagrant plugin `vagrant-vbguest` will cause problems with the shared folder in most cases. Please uninstall the plugin first if you have it installed with `vagrant plugin uninstall vagrant-vbguest`.
 
-``` bash
+```bash
 git clone https://github.com/wharton/python-vagrant-centos7.git
 cd python-vagrant-centos7
 VAGRANT_HOSTNAME="vagrant.my.domain.com" vagrant up
@@ -114,7 +115,7 @@ The Vagrant box comes with PostgreSQL 9.6. The `vagrant` user is set up as a Pos
 
 ```
 $ psql
-psql (9.6.3)
+psql (10.0)
 Type "help" for help.
 
 vagrant=# \?
@@ -124,12 +125,6 @@ CREATE ROLE
 vagrant=# CREATE DATABASE my_django_db WITH OWNER my_django_user;
 CREATE DATABASE
 vagrant=# \q
-```
-
-If you'd like to connect from a GUI on your local system, a script is available to open the firewall and configure PostgreSQL to allow connections from the host machine.
-
-```
-sudo /vagrant/assets/open_postgres_to_host.sh
 ```
 
 ## Setting Up Django & virtualenv
@@ -193,11 +188,17 @@ In Windows 10, the "World Wide Web Publishing Service" automatically starts on p
 * Click the "Stop" button.
 * Click "OK".
 
+Maintainer:
+
+* Tim Allen (https://github.com/FlipperPA)
+
 Contributors:
 
-* Tim Allen (tallen@wharton.upenn.edu)
-* Gavin Burris (bug@wharton.upenn.edu)
-* Dave Roller (roller@wharton.upenn.edu)
+* Jane Eisenstein (https://github.com/janeeisenstein)
+* Gavin Burris (https://github.com/00gavin)
+* Dave Roller (https://github.com/rollerwhrtn)
+* Shawn Zamechek (https://github.com/shawnzam/)
+* Todd Seidelmann (https://github.com/seidelma/)
 * Brian Jopling
 * Clay Wells
 
